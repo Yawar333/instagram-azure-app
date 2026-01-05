@@ -1,76 +1,111 @@
-const express = require("express");
-const multer = require("multer");
-const cors = require("cors");
-const fs = require("fs");
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const session = require('express-session');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = 3000;
 
-const PORT = process.env.PORT || 3000;
+// ================= CONFIG =================
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-// Create uploads folder if not exists
-if (!fs.existsSync("uploads")) {
-  fs.mkdirSync("uploads");
-}
+app.use(express.urlencoded({ extended: true }));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
-// Multer storage
+app.use(session({
+  secret: 'instagram-secret',
+  resave: false,
+  saveUninitialized: true
+}));
+
+// ================= DATA (DEMO) =================
+let users = [];     
+let images = [];    
+
+// ================= MULTER =================
 const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads');
   },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
 });
+
 const upload = multer({ storage });
 
-// In-memory image list
-let images = [];
+// ================= AUTH =================
+function requireLogin(req, res, next) {
+  if (!req.session.user) return res.redirect('/login');
+  next();
+}
 
-// Upload image (Creator)
-app.post("/upload", upload.single("photo"), (req, res) => {
-  const { title, caption, location, people } = req.body;
+// ================= ROUTES =================
 
-  const image = {
-    id: images.length + 1,
-    title,
-    caption,
-    location,
-    people,
-    filename: req.file.filename,
-    rating: 0,
-    comments: [],
-  };
-
-  images.push(image);
-  res.json({ message: "Image uploaded successfully", image });
+// Home
+app.get('/', (req, res) => {
+  res.render('index', {
+    user: req.session.user,
+    images: images
+  });
 });
 
-// View images (Consumer)
-app.get("/images", (req, res) => {
-  res.json(images);
+// Signup
+app.get('/signup', (req, res) => {
+  res.render('signup');
 });
 
-// Comment
-app.post("/comment/:id", (req, res) => {
-  const image = images.find((i) => i.id == req.params.id);
-  if (!image) return res.status(404).send("Image not found");
-
-  image.comments.push(req.body.comment);
-  res.send("Comment added");
+app.post('/signup', (req, res) => {
+  const { username, password, role } = req.body;
+  users.push({ username, password, role });
+  res.redirect('/login');
 });
 
-// Rate
-app.post("/rate/:id", (req, res) => {
-  const image = images.find((i) => i.id == req.params.id);
-  if (!image) return res.status(404).send("Image not found");
-
-  image.rating = req.body.rating;
-  res.send("Rating updated");
+// Login
+app.get('/login', (req, res) => {
+  res.render('login');
 });
 
-// Serve images
-app.use("/uploads", express.static("uploads"));
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(
+    u => u.username === username && u.password === password
+  );
 
+  if (!user) return res.send('Invalid credentials');
+
+  req.session.user = user;
+  res.redirect('/');
+});
+
+// Logout
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});
+
+// Upload page (Creator only)
+app.get('/upload', requireLogin, (req, res) => {
+  if (req.session.user.role !== 'creator') {
+    return res.send('Only creators can upload images');
+  }
+  res.render('upload');
+});
+
+// Handle upload
+app.post('/upload', requireLogin, upload.single('image'), (req, res) => {
+  images.push({
+    path: '/uploads/' + req.file.filename,
+    user: req.session.user.username,
+    title: req.body.title,
+    caption: req.body.caption,
+    location: req.body.location
+  });
+  res.redirect('/');
+});
+
+// ================= SERVER =================
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
