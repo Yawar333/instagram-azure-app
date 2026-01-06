@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SnapVerse | Capture. Connect. Create.</title>
+  <title>SnapVerse | Capture Life. Share Stories.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Bootstrap -->
@@ -11,35 +11,27 @@
 
   <style>
     body {
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      background: linear-gradient(120deg, #1e3c72, #2a5298);
       min-height: 100vh;
-      color: #fff;
-      overflow-x: hidden;
-    }
-
-    .glass-box {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    }
-
-    .feature i {
-      font-size: 1.5rem;
-      margin-right: 12px;
-      color: #ffd369;
-    }
-
-    .feature {
-      font-size: 1.1rem;
-      margin-bottom: 18px;
       display: flex;
       align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .hero-card {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 50px;
+      max-width: 900px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
     }
 
     .brand-title {
-      font-size: 3rem;
+      font-size: 3.2rem;
       font-weight: 700;
       letter-spacing: 1px;
     }
@@ -47,56 +39,55 @@
     .tagline {
       font-size: 1.2rem;
       opacity: 0.9;
+      margin-bottom: 30px;
     }
 
-    .cta-box a {
-      font-size: 1.1rem;
+    .feature {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 1.05rem;
+    }
+
+    .feature i {
+      font-size: 1.3rem;
+      margin-right: 10px;
+      color: #ffd369;
+    }
+
+    .cta-buttons a {
       padding: 12px;
+      font-size: 1.1rem;
       border-radius: 10px;
-    }
-
-    .btn-google {
-      background: #fff;
-      color: #444;
-      font-weight: 500;
     }
   </style>
 </head>
 
 <body>
-  <div class="container py-5">
-    <div class="row align-items-center">
+  <div class="hero-card text-center">
 
-      <!-- LEFT BRANDING -->
-      <div class="col-md-6 mb-4">
-        <div class="glass-box">
-          <h1 class="brand-title"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
-          <p class="tagline mb-4">Capture your world. Share your story. Join the Verse.</p>
+    <!-- BRAND -->
+    <h1 class="brand-title mb-2"><i class="bi bi-camera"></i> SnapVerse</h1>
+    <p class="tagline">A clean, modern space to share your world.</p>
 
-          <div class="feature"><i class="bi bi-stars"></i> A universe of creators</div>
-          <div class="feature"><i class="bi bi-upload"></i> Upload photos & videos instantly</div>
-          <div class="feature"><i class="bi bi-heart-fill"></i> Like, comment & engage</div>
-          <div class="feature"><i class="bi bi-people-fill"></i> Build your community</div>
-          <div class="feature"><i class="bi bi-bar-chart-fill"></i> Track your growth</div>
-        </div>
-      </div>
-
-      <!-- RIGHT CTA -->
+    <!-- FEATURES -->
+    <div class="row text-start mb-4">
       <div class="col-md-6">
-        <div class="glass-box text-center cta-box">
-          <h2 class="mb-3">Welcome to the Verse</h2>
-          <p class="mb-4">Start your journey with creators worldwide</p>
-
-          <a href="/login" class="btn btn-warning w-100 mb-3">Login</a>
-          <a href="/signup" class="btn btn-outline-light w-100 mb-3">Create Account</a>
-
-          <button class="btn btn-google w-100">
-            <i class="bi bi-google"></i> Continue with Google
-          </button>
-        </div>
+        <div class="feature"><i class="bi bi-image"></i> Share photos instantly</div>
+        <div class="feature"><i class="bi bi-chat-dots"></i> Engage with comments</div>
       </div>
-
+      <div class="col-md-6">
+        <div class="feature"><i class="bi bi-heart-fill"></i> Like your favorite posts</div>
+        <div class="feature"><i class="bi bi-people"></i> Connect with creators</div>
+      </div>
     </div>
+
+    <!-- CTA BUTTONS -->
+    <div class="cta-buttons">
+      <a href="/login" class="btn btn-warning w-100 mb-3">Login</a>
+      <a href="/signup" class="btn btn-outline-light w-100">Create Account</a>
+    </div>
+
   </div>
 </body>
 </html>
