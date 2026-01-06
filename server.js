@@ -1,111 +1,111 @@
-const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const session = require('express-session');
+const express = require("express");
+const session = require("express-session");
+const path = require("path");
+const multer = require("multer");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// ================= CONFIG =================
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
+/* ---------- Middleware ---------- */
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use(express.static("public"));
 
-app.use(session({
-  secret: 'instagram-secret',
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    secret: "instagram-secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
-// ================= DATA (DEMO) =================
-let users = [];     
-let images = [];    
+/* ---------- View Engine ---------- */
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-// ================= MULTER =================
+/* ---------- Fake Users (for assignment) ---------- */
+const users = [];
+
+/* ---------- File Upload ---------- */
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/uploads');
+  destination: "public/uploads",
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
   },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
 });
-
 const upload = multer({ storage });
 
-// ================= AUTH =================
-function requireLogin(req, res, next) {
-  if (!req.session.user) return res.redirect('/login');
-  next();
-}
+const images = [];
 
-// ================= ROUTES =================
+/* ---------- Routes ---------- */
 
 // Home
-app.get('/', (req, res) => {
-  res.render('index', {
+app.get("/", (req, res) => {
+  res.render("index", {
     user: req.session.user,
-    images: images
+    images: images,
   });
 });
 
 // Signup
-app.get('/signup', (req, res) => {
-  res.render('signup');
+app.get("/signup", (req, res) => {
+  res.render("signup");
 });
 
-app.post('/signup', (req, res) => {
+app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
+
   users.push({ username, password, role });
-  res.redirect('/login');
+
+  res.redirect("/login");
 });
 
 // Login
-app.get('/login', (req, res) => {
-  res.render('login');
+app.get("/login", (req, res) => {
+  res.render("login");
 });
 
-app.post('/login', (req, res) => {
+app.post("/login", (req, res) => {
   const { username, password } = req.body;
+
   const user = users.find(
-    u => u.username === username && u.password === password
+    (u) => u.username === username && u.password === password
   );
 
-  if (!user) return res.send('Invalid credentials');
+  if (!user) {
+    return res.send("Invalid login");
+  }
 
-  req.session.user = user;
-  res.redirect('/');
+  // ✅ VERY IMPORTANT
+  req.session.user = {
+    username: user.username,
+    role: user.role,
+  };
+
+  res.redirect("/");
 });
 
 // Logout
-app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/');
-});
-
-// Upload page (Creator only)
-app.get('/upload', requireLogin, (req, res) => {
-  if (req.session.user.role !== 'creator') {
-    return res.send('Only creators can upload images');
-  }
-  res.render('upload');
-});
-
-// Handle upload
-app.post('/upload', requireLogin, upload.single('image'), (req, res) => {
-  images.push({
-    path: '/uploads/' + req.file.filename,
-    user: req.session.user.username,
-    title: req.body.title,
-    caption: req.body.caption,
-    location: req.body.location
+app.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
   });
-  res.redirect('/');
 });
 
-// ================= SERVER =================
+// Upload Image
+app.post("/upload", upload.single("photo"), (req, res) => {
+  if (!req.session.user) {
+    return res.redirect("/login");
+  }
+
+  images.push({
+    path: "/uploads/" + req.file.filename,
+    user: req.session.user.username,
+  });
+
+  res.redirect("/");
+});
+
+/* ---------- Start Server ---------- */
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
