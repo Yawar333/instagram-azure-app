@@ -11,27 +11,23 @@
 
   <style>
     body {
-      background: linear-gradient(120deg, #1e3c72, #2a5298);
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       color: #fff;
+      overflow-x: hidden;
       font-family: 'Segoe UI', sans-serif;
     }
 
-    .hero-card {
+    .glass-box {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(14px);
       border-radius: 20px;
-      padding: 50px;
-      max-width: 900px;
-      width: 90%;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      padding: 40px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
     }
 
     .brand-title {
-      font-size: 3.2rem;
+      font-size: 3rem;
       font-weight: 700;
       letter-spacing: 1px;
     }
@@ -39,55 +35,75 @@
     .tagline {
       font-size: 1.2rem;
       opacity: 0.9;
-      margin-bottom: 30px;
     }
 
     .feature {
       display: flex;
       align-items: center;
-      margin-bottom: 12px;
-      font-size: 1.05rem;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
     }
 
     .feature i {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       margin-right: 10px;
-      color: #ffd369;
+      color: #4dd0e1;
     }
 
-    .cta-buttons a {
+    .cta-box a {
       padding: 12px;
       font-size: 1.1rem;
       border-radius: 10px;
+    }
+
+    .btn-primary {
+      background-color: #4dd0e1;
+      border: none;
+      color: #003b46;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      background-color: #3bc0d1;
+    }
+
+    .btn-outline-light {
+      border-width: 2px;
+      font-weight: 500;
     }
   </style>
 </head>
 
 <body>
-  <div class="hero-card text-center">
+  <div class="container py-5">
+    <div class="row align-items-center">
 
-    <!-- BRAND -->
-    <h1 class="brand-title mb-2"><i class="bi bi-camera"></i> SnapVerse</h1>
-    <p class="tagline">A clean, modern space to share your world.</p>
+      <!-- LEFT BRANDING -->
+      <div class="col-md-6 mb-4">
+        <div class="glass-box">
+          <h1 class="brand-title mb-2"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
+          <p class="tagline mb-4">Capture your world. Share your story. Join the Verse.</p>
 
-    <!-- FEATURES -->
-    <div class="row text-start mb-4">
-      <div class="col-md-6">
-        <div class="feature"><i class="bi bi-image"></i> Share photos instantly</div>
-        <div class="feature"><i class="bi bi-chat-dots"></i> Engage with comments</div>
+          <div class="feature"><i class="bi bi-stars"></i> A universe of creators</div>
+          <div class="feature"><i class="bi bi-upload"></i> Upload photos & videos instantly</div>
+          <div class="feature"><i class="bi bi-heart-fill"></i> Like, comment & engage</div>
+          <div class="feature"><i class="bi bi-people-fill"></i> Build your community</div>
+          <div class="feature"><i class="bi bi-bar-chart-fill"></i> Track your growth</div>
+        </div>
       </div>
+
+      <!-- RIGHT CTA -->
       <div class="col-md-6">
-        <div class="feature"><i class="bi bi-heart-fill"></i> Like your favorite posts</div>
-        <div class="feature"><i class="bi bi-people"></i> Connect with creators</div>
+        <div class="glass-box text-center cta-box">
+          <h2 class="mb-3">Welcome to the Verse</h2>
+          <p class="mb-4">Start your journey with creators worldwide</p>
+
+          <a href="/login" class="btn btn-primary w-100 mb-3">Login</a>
+          <a href="/signup" class="btn btn-outline-light w-100">Create Account</a>
+        </div>
       </div>
-    </div>
 
-    <!-- CTA BUTTONS -->
-    <div class="cta-buttons">
-      <a href="/login" class="btn btn-warning w-100 mb-3">Login</a>
-      <a href="/signup" class="btn btn-outline-light w-100">Create Account</a>
     </div>
-
   </div>
 </body>
 </html>
