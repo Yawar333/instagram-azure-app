@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <title>SnapVerse | Capture Life. Share Stories.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 
@@ -14,95 +12,137 @@
       background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
       min-height: 100vh;
       color: #fff;
-      overflow-x: hidden;
       font-family: 'Segoe UI', sans-serif;
     }
 
-    .glass-box {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(14px);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    .left-panel {
+      padding: 50px;
     }
 
     .brand-title {
       font-size: 3rem;
       font-weight: 700;
-      letter-spacing: 1px;
     }
 
     .tagline {
       font-size: 1.2rem;
       opacity: 0.9;
+      margin-bottom: 30px;
     }
 
-    .feature {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      font-size: 1.1rem;
-    }
-
-    .feature i {
-      font-size: 1.4rem;
-      margin-right: 10px;
-      color: #4dd0e1;
-    }
-
-    .cta-box a {
+    .cta-buttons a {
       padding: 12px;
       font-size: 1.1rem;
       border-radius: 10px;
     }
 
-    .btn-primary {
-      background-color: #4dd0e1;
+    .right-panel {
+      background-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.1);
       border: none;
-      color: #003b46;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .card img {
+      border-radius: 15px 15px 0 0;
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
       font-weight: 600;
     }
 
-    .btn-primary:hover {
-      background-color: #3bc0d1;
+    .card-text {
+      font-size: 0.95rem;
+      opacity: 0.85;
     }
 
-    .btn-outline-light {
-      border-width: 2px;
-      font-weight: 500;
+    .icon-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 1.1rem;
+    }
+
+    .icon-bar i {
+      margin-right: 6px;
     }
   </style>
 </head>
 
 <body>
-  <div class="container py-5">
-    <div class="row align-items-center">
+  <div class="container-fluid">
+    <div class="row">
 
       <!-- LEFT BRANDING -->
-      <div class="col-md-6 mb-4">
-        <div class="glass-box">
-          <h1 class="brand-title mb-2"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
-          <p class="tagline mb-4">Capture your world. Share your story. Join the Verse.</p>
+      <div class="col-md-6 left-panel d-flex flex-column justify-content-center">
+        <h1 class="brand-title mb-2"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
+        <p class="tagline">Capture your world. Share your story. Join the Verse.</p>
 
-          <div class="feature"><i class="bi bi-stars"></i> A universe of creators</div>
-          <div class="feature"><i class="bi bi-upload"></i> Upload photos & videos instantly</div>
-          <div class="feature"><i class="bi bi-heart-fill"></i> Like, comment & engage</div>
-          <div class="feature"><i class="bi bi-people-fill"></i> Build your community</div>
-          <div class="feature"><i class="bi bi-bar-chart-fill"></i> Track your growth</div>
-        </div>
-      </div>
-
-      <!-- RIGHT CTA -->
-      <div class="col-md-6">
-        <div class="glass-box text-center cta-box">
-          <h2 class="mb-3">Welcome to the Verse</h2>
-          <p class="mb-4">Start your journey with creators worldwide</p>
-
+        <div class="cta-buttons">
           <a href="/login" class="btn btn-primary w-100 mb-3">Login</a>
           <a href="/signup" class="btn btn-outline-light w-100">Create Account</a>
         </div>
       </div>
 
+      <!-- RIGHT PHOTO FEED PREVIEW -->
+      <div class="col-md-6 right-panel">
+        <h4 class="mb-4">Live Feed Preview</h4>
+
+        <!-- Card 1 -->
+        <div class="card">
+          <img src="https://source.unsplash.com/600x400/?nature" class="card-img-top" alt="Nature" />
+          <div class="card-body">
+            <h5 class="card-title">@yawar_snap</h5>
+            <p class="card-text">Exploring the beauty of nature 🌿</p>
+            <div class="icon-bar">
+              <span><i class="bi bi-heart-fill text-danger"></i> 128</span>
+              <span><i class="bi bi-chat-dots text-light"></i> 12 comments</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card">
+          <img src="https://source.unsplash.com/600x400/?city" class="card-img-top" alt="City" />
+          <div class="card-body">
+            <h5 class="card-title">@snapverse_user</h5>
+            <p class="card-text">City lights and late-night vibes ✨</p>
+            <div class="icon-bar">
+              <span><i class="bi bi-heart-fill text-danger"></i> 89</span>
+              <span><i class="bi bi-chat-dots text-light"></i> 7 comments</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card">
+          <img src="https://source.unsplash.com/600x400/?food" class="card-img-top" alt="Food" />
+          <div class="card-body">
+            <h5 class="card-title">@chef_snap</h5>
+            <p class="card-text">Homemade pasta night 🍝</p>
+            <div class="icon-bar">
+              <span><i class="bi bi-heart-fill text-danger"></i> 210</span>
+              <span><i class="bi bi-chat-dots text-light"></i> 18 comments</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </body>
