@@ -12,36 +12,25 @@
       background: #0f2027;
       color: #fff;
       font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
     }
 
     .upload-box {
-      text-align: center;
-      background-color: rgba(255, 255, 255, 0.05);
-      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      background: rgba(255,255,255,0.06);
+      padding: 35px;
       border-radius: 20px;
       box-shadow: 0 0 20px rgba(0,0,0,0.4);
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .upload-box h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-    }
-
-    .upload-box form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      text-align: center;
     }
 
     .form-control {
-      background-color: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.15);
       border: none;
       color: #fff;
     }
@@ -57,6 +46,7 @@
       color: #003b46;
       padding: 12px;
       border-radius: 10px;
+      width: 100%;
     }
 
     .btn-upload:hover {
@@ -69,10 +59,6 @@
       color: #ccc;
       text-decoration: none;
     }
-
-    .back-link:hover {
-      color: #fff;
-    }
   </style>
 </head>
 
@@ -80,9 +66,16 @@
   <div class="upload-box">
     <h2><i class="bi bi-cloud-upload"></i> Upload to SnapVerse</h2>
 
+    <!-- FIXED FORM (no flexbox issues) -->
     <form action="/upload" method="POST" enctype="multipart/form-data">
-      <input type="text" name="caption" class="form-control" placeholder="Write a caption..." required />
-      <input type="file" name="photo" class="form-control" accept="image/*" required />
+      <div class="mb-3">
+        <input type="text" name="caption" class="form-control" placeholder="Write a caption..." required />
+      </div>
+
+      <div class="mb-3">
+        <input type="file" name="photo" class="form-control" accept="image/*" required />
+      </div>
+
       <button type="submit" class="btn btn-upload">Upload</button>
     </form>
 
