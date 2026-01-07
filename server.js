@@ -75,7 +75,6 @@ app.post("/login", (req, res) => {
     return res.send("Invalid login");
   }
 
-  // ✅ VERY IMPORTANT
   req.session.user = {
     username: user.username,
     role: user.role,
@@ -91,7 +90,13 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// Upload Image
+// ✅ Upload Page (GET)
+app.get("/upload", (req, res) => {
+  if (!req.session.user) return res.redirect("/login");
+  res.render("upload", { user: req.session.user });
+});
+
+// ✅ Upload Image (POST)
 app.post("/upload", upload.single("photo"), (req, res) => {
   if (!req.session.user) {
     return res.redirect("/login");
