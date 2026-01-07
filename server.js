@@ -97,7 +97,8 @@ app.get("/upload", (req, res) => {
 });
 
 // ✅ Upload Image (POST)
-app.post("/upload", upload.single("photo"), (req, res) => {
+// Upload Image (corrected field name)
+app.post("/upload", upload.single("media"), (req, res) => {
   if (!req.session.user) {
     return res.redirect("/login");
   }
@@ -109,6 +110,7 @@ app.post("/upload", upload.single("photo"), (req, res) => {
 
   res.redirect("/");
 });
+
 
 /* ---------- Start Server ---------- */
 app.listen(PORT, () => {
