@@ -2,40 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SnapVerse | Share Your Moments</title>
+  <title>SnapVerse | Capture Life. Share Stories.</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
   <style>
-    body { background-color: #f0f2f5; }
-    .left-panel { background-color: #fff; padding: 40px; height: 100vh; }
-    .feature { display: flex; align-items: center; margin-bottom: 15px; }
-    .feature i { font-size: 1.2rem; margin-right: 10px; color: #007bff; }
-    .right-panel { padding: 40px; height: 100vh; }
-    .cta-box { max-width: 400px; margin: auto; }
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      min-height: 100vh;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .left-panel {
+      padding: 50px;
+    }
+
+    .brand-title {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .right-panel {
+      background-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .card {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .card img {
+      border-radius: 15px 15px 0 0;
+    }
+
+    .icon-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 1.1rem;
+    }
   </style>
 </head>
+
 <body>
   <div class="container-fluid">
     <div class="row">
-      <!-- LEFT BRANDING -->
+
+      <!-- LEFT SIDE -->
       <div class="col-md-6 left-panel d-flex flex-column justify-content-center">
-        <h1 class="mb-3"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
-        <h5 class="mb-4 text-muted">Share your moments with the world</h5>
-        <div class="feature"><i class="bi bi-upload"></i> Upload photos & videos</div>
-        <div class="feature"><i class="bi bi-heart"></i> Like & comment on posts</div>
-        <div class="feature"><i class="bi bi-person-plus"></i> Follow your favorite creators</div>
-        <div class="feature"><i class="bi bi-bar-chart"></i> Track your analytics</div>
+
+        <h1 class="brand-title mb-2"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
+        <p class="tagline">Capture your world. Share your story. Join the Verse.</p>
+
+        <!-- If user is logged in -->
+        <% if (user) { %>
+          <h4 class="mb-3">Welcome, <%= user.username %> 👋</h4>
+
+          <a href="/upload" class="btn btn-primary w-50 mb-3">Upload Photo/Video</a>
+          <a href="/logout" class="btn btn-outline-light w-50">Logout</a>
+
+        <% } else { %>
+
+          <!-- If user is NOT logged in -->
+          <a href="/login" class="btn btn-primary w-50 mb-3">Login</a>
+          <a href="/signup" class="btn btn-outline-light w-50">Create Account</a>
+
+        <% } %>
+
       </div>
 
-      <!-- RIGHT CTA -->
-      <div class="col-md-6 right-panel d-flex align-items-center">
-        <div class="cta-box text-center">
-          <h3 class="mb-3">Welcome to SnapVerse</h3>
-          <p class="text-muted mb-4">Join the community and start sharing</p>
-          <a href="/login" class="btn btn-primary w-100 mb-2">Login</a>
-          <a href="/signup" class="btn btn-outline-secondary w-100 mb-2">Signup</a>
+      <!-- RIGHT SIDE FEED -->
+      <div class="col-md-6 right-panel">
+        <h4 class="mb-4">Live Feed Preview</h4>
+
+        <!-- STATIC CARDS -->
+        <div class="card">
+          <img src="https://images.unsplash.com/photo-1767129243147-53c83c6a12f5?w=600&auto=format&fit=crop&q=60" class="card-img-top" />
+          <div class="card-body">
+            <h5>@yawar_snap</h5>
+            <p>Exploring the beauty of nature 🌿</p>
+            <div class="icon-bar">
+              <span><i class="bi bi-heart-fill text-danger"></i> 128</span>
+              <span><i class="bi bi-chat-dots"></i> 12 comments</span>
+            </div>
+          </div>
         </div>
+
+        <!-- DYNAMIC UPLOADED IMAGES -->
+        <% images.forEach(img => { %>
+          <div class="card">
+            <img src="<%= img.path %>" class="card-img-top" />
+            <div class="card-body">
+              <h5>@<%= img.user %></h5>
+              <p>New upload!</p>
+            </div>
+          </div>
+        <% }) %>
+
       </div>
     </div>
   </div>
