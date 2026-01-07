@@ -49,6 +49,9 @@
 
     .card img {
       border-radius: 15px 15px 0 0;
+      max-height: 300px;
+      object-fit: cover;
+      width: 100%;
     }
 
     .icon-bar {
@@ -66,55 +69,36 @@
 
       <!-- LEFT SIDE -->
       <div class="col-md-6 left-panel d-flex flex-column justify-content-center">
-
         <h1 class="brand-title mb-2"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
         <p class="tagline">Capture your world. Share your story. Join the Verse.</p>
 
-        <!-- If user is logged in -->
         <% if (user) { %>
           <h4 class="mb-3">Welcome, <%= user.username %> 👋</h4>
-
           <a href="/upload" class="btn btn-primary w-50 mb-3">Upload Photo/Video</a>
           <a href="/logout" class="btn btn-outline-light w-50">Logout</a>
-
         <% } else { %>
-
-          <!-- If user is NOT logged in -->
           <a href="/login" class="btn btn-primary w-50 mb-3">Login</a>
           <a href="/signup" class="btn btn-outline-light w-50">Create Account</a>
-
         <% } %>
-
       </div>
 
       <!-- RIGHT SIDE FEED -->
       <div class="col-md-6 right-panel">
         <h4 class="mb-4">Live Feed Preview</h4>
 
-        <!-- STATIC CARDS -->
-        <div class="card">
-          <img src="https://images.unsplash.com/photo-1767129243147-53c83c6a12f5?w=600&auto=format&fit=crop&q=60" class="card-img-top" />
-          <div class="card-body">
-            <h5>@yawar_snap</h5>
-            <p>Exploring the beauty of nature 🌿</p>
-            <div class="icon-bar">
-              <span><i class="bi bi-heart-fill text-danger"></i> 128</span>
-              <span><i class="bi bi-chat-dots"></i> 12 comments</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- DYNAMIC UPLOADED IMAGES -->
         <% images.forEach(img => { %>
           <div class="card">
             <img src="<%= img.path %>" class="card-img-top" />
             <div class="card-body">
               <h5>@<%= img.user %></h5>
-              <p>New upload!</p>
+              <p><%= img.caption %></p>
+              <div class="icon-bar">
+                <span><i class="bi bi-heart-fill text-danger"></i> 0</span>
+                <span><i class="bi bi-chat-dots"></i> 0 comments</span>
+              </div>
             </div>
           </div>
         <% }) %>
-
       </div>
     </div>
   </div>

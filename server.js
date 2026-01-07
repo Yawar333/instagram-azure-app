@@ -22,7 +22,7 @@ app.use(
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-/* ---------- Fake Users (for assignment) ---------- */
+/* ---------- Fake Users ---------- */
 const users = [];
 
 /* ---------- File Upload ---------- */
@@ -53,9 +53,7 @@ app.get("/signup", (req, res) => {
 
 app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
-
   users.push({ username, password, role });
-
   res.redirect("/login");
 });
 
@@ -66,14 +64,10 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
-
   const user = users.find(
     (u) => u.username === username && u.password === password
   );
-
-  if (!user) {
-    return res.send("Invalid login");
-  }
+  if (!user) return res.send("Invalid login");
 
   req.session.user = {
     username: user.username,
@@ -90,27 +84,26 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// ✅ Upload Page (GET)
+// Upload Page
 app.get("/upload", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
   res.render("upload", { user: req.session.user });
 });
 
-// ✅ Upload Image (POST)
-// Upload Image (corrected field name)
+// Upload Image
 app.post("/upload", upload.single("media"), (req, res) => {
-  if (!req.session.user) {
-    return res.redirect("/login");
-  }
+  if (!req.session.user) return res.redirect("/login");
+
+  const { caption } = req.body;
 
   images.push({
     path: "/uploads/" + req.file.filename,
     user: req.session.user.username,
+    caption: caption,
   });
 
   res.redirect("/");
 });
-
 
 /* ---------- Start Server ---------- */
 app.listen(PORT, () => {
