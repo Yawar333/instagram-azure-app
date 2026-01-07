@@ -22,10 +22,10 @@ app.use(
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-/* ---------- Fake Users ---------- */
-const users = [];
+/* ---------- Fake Users (in-memory) ---------- */
+const users = []; // { username, password, role }
 
-/* ---------- File Upload ---------- */
+/* ---------- File Upload (Multer) ---------- */
 const storage = multer.diskStorage({
   destination: "public/uploads",
   filename: (req, file, cb) => {
@@ -34,11 +34,11 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-const images = [];
+const images = []; // { path, user, caption }
 
 /* ---------- Routes ---------- */
 
-// Home
+// Home / Feed
 app.get("/", (req, res) => {
   res.render("index", {
     user: req.session.user,
@@ -46,28 +46,37 @@ app.get("/", (req, res) => {
   });
 });
 
-// Signup
+// Signup (GET)
 app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
+// Signup (POST)
 app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
+
+  // Simple in-memory user store
   users.push({ username, password, role });
+
   res.redirect("/login");
 });
 
-// Login
+// Login (GET)
 app.get("/login", (req, res) => {
   res.render("login");
 });
 
+// Login (POST)
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
+
   const user = users.find(
     (u) => u.username === username && u.password === password
   );
-  if (!user) return res.send("Invalid login");
+
+  if (!user) {
+    return res.send("Invalid login");
+  }
 
   req.session.user = {
     username: user.username,
@@ -84,17 +93,21 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// Upload Page
+// Upload page (GET)
 app.get("/upload", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
   res.render("upload", { user: req.session.user });
 });
 
-// Upload Image
-app.post("/upload", upload.single("media"), (req, res) => {
+// Upload image (POST)
+app.post("/upload", upload.single("photo"), (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
   const { caption } = req.body;
+
+  if (!req.file) {
+    return res.send("No file uploaded");
+  }
 
   images.push({
     path: "/uploads/" + req.file.filename,
