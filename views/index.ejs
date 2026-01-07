@@ -2,92 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SnapVerse | Capture Life. Share Stories.</title>
+  <title>SnapVerse | Share Your Moments</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
-
   <style>
-    body {
-      background: linear-gradient(120deg, #1e3c72, #2a5298);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    .hero-card {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(14px);
-      border-radius: 20px;
-      padding: 50px;
-      max-width: 900px;
-      width: 90%;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-    }
-
-    .brand-title {
-      font-size: 3.2rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-
-    .tagline {
-      font-size: 1.2rem;
-      opacity: 0.9;
-      margin-bottom: 30px;
-    }
-
-    .feature {
-      display: flex;
-      align-items: center;
-      margin-bottom: 12px;
-      font-size: 1.05rem;
-    }
-
-    .feature i {
-      font-size: 1.3rem;
-      margin-right: 10px;
-      color: #ffd369;
-    }
-
-    .cta-buttons a {
-      padding: 12px;
-      font-size: 1.1rem;
-      border-radius: 10px;
-    }
+    body { background-color: #f0f2f5; }
+    .left-panel { background-color: #fff; padding: 40px; height: 100vh; }
+    .feature { display: flex; align-items: center; margin-bottom: 15px; }
+    .feature i { font-size: 1.2rem; margin-right: 10px; color: #007bff; }
+    .right-panel { padding: 40px; height: 100vh; }
+    .cta-box { max-width: 400px; margin: auto; }
   </style>
 </head>
-
 <body>
-  <div class="hero-card text-center">
-
-    <!-- BRAND -->
-    <h1 class="brand-title mb-2"><i class="bi bi-camera"></i> SnapVerse</h1>
-    <p class="tagline">A clean, modern space to share your world.</p>
-
-    <!-- FEATURES -->
-    <div class="row text-start mb-4">
-      <div class="col-md-6">
-        <div class="feature"><i class="bi bi-image"></i> Share photos instantly</div>
-        <div class="feature"><i class="bi bi-chat-dots"></i> Engage with comments</div>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- LEFT BRANDING -->
+      <div class="col-md-6 left-panel d-flex flex-column justify-content-center">
+        <h1 class="mb-3"><i class="bi bi-camera-fill"></i> SnapVerse</h1>
+        <h5 class="mb-4 text-muted">Share your moments with the world</h5>
+        <div class="feature"><i class="bi bi-upload"></i> Upload photos & videos</div>
+        <div class="feature"><i class="bi bi-heart"></i> Like & comment on posts</div>
+        <div class="feature"><i class="bi bi-person-plus"></i> Follow your favorite creators</div>
+        <div class="feature"><i class="bi bi-bar-chart"></i> Track your analytics</div>
       </div>
-      <div class="col-md-6">
-        <div class="feature"><i class="bi bi-heart-fill"></i> Like your favorite posts</div>
-        <div class="feature"><i class="bi bi-people"></i> Connect with creators</div>
+
+      <!-- RIGHT CTA -->
+      <div class="col-md-6 right-panel d-flex align-items-center">
+        <div class="cta-box text-center">
+          <h3 class="mb-3">Welcome to SnapVerse</h3>
+          <p class="text-muted mb-4">Join the community and start sharing</p>
+          <a href="/login" class="btn btn-primary w-100 mb-2">Login</a>
+          <a href="/signup" class="btn btn-outline-secondary w-100 mb-2">Signup</a>
+        </div>
       </div>
     </div>
-
-    <!-- CTA BUTTONS -->
-    <div class="cta-buttons">
-      <a href="/login" class="btn btn-warning w-100 mb-3">Login</a>
-      <a href="/signup" class="btn btn-outline-light w-100">Create Account</a>
-    </div>
-
   </div>
 </body>
 </html>
