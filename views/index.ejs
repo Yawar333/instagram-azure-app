@@ -81,10 +81,20 @@
     <h1>SnapVerse</h1>
     <p class="tagline">Capture your world. Share your story. Join the Verse.</p>
 
-    <div class="auth-buttons">
-      <a href="/login" class="btn-primary">Login</a>
-      <a href="/signup" class="btn-outline-light">Create Account</a>
-    </div>
+    <% if (user) { %>
+      <h2>Welcome, <%= user.username %>!</h2>
+
+      <div class="auth-buttons">
+        <a href="/upload" class="btn-primary">Upload Photo</a>
+        <a href="/logout" class="btn-outline-light">Logout</a>
+      </div>
+
+    <% } else { %>
+      <div class="auth-buttons">
+        <a href="/login" class="btn-primary">Login</a>
+        <a href="/signup" class="btn-outline-light">Create Account</a>
+      </div>
+    <% } %>
 
     <div class="feed">
       <h2>Live Feed</h2>
