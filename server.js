@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const path = require("path");
 const multer = require("multer");
 
@@ -9,12 +10,17 @@ const PORT = process.env.PORT || 3000;
 /* ---------- Middleware ---------- */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(cookieParser());
 
 app.use(
   session({
-    secret: "instagram-secret",
+    secret: "snapverse-secret-key",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: false, // true only if HTTPS
+      maxAge: 1000 * 60 * 60 * 24, // 1 day session
+    },
   })
 );
 
@@ -25,7 +31,7 @@ app.set("views", path.join(__dirname, "views"));
 /* ---------- Fake Users (in-memory) ---------- */
 const users = []; // { username, password, role }
 
-/* ---------- File Upload (Multer - LOCAL STORAGE) ---------- */
+/* ---------- File Upload (LOCAL STORAGE) ---------- */
 const storage = multer.diskStorage({
   destination: "public/uploads",
   filename: (req, file, cb) => {
@@ -55,8 +61,11 @@ app.get("/signup", (req, res) => {
 // Signup (POST)
 app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
+
   users.push({ username, password, role });
-  res.redirect("/login");
+
+  req.session.user = { username, role };
+  res.redirect("/");
 });
 
 // Login (GET)
@@ -114,5 +123,5 @@ app.post("/upload", upload.single("photo"), (req, res) => {
 
 /* ---------- Start Server ---------- */
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`SnapVerse running on port ${PORT}`);
 });
