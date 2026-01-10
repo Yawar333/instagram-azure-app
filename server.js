@@ -2,6 +2,8 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const multer = require("multer");
+const { BlobServiceClient } = require("@azure/storage-blob");
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,7 +14,7 @@ app.use(express.static("public"));
 
 app.use(
   session({
-    secret: "instagram-secret",
+    secret: "snapverse-secret",
     resave: false,
     saveUninitialized: false,
   })
@@ -25,15 +27,20 @@ app.set("views", path.join(__dirname, "views"));
 /* ---------- Fake Users (in-memory) ---------- */
 const users = []; // { username, password, role }
 
-/* ---------- File Upload (Multer) ---------- */
-const storage = multer.diskStorage({
-  destination: "public/uploads",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
+/* ---------- Azure Blob Setup ---------- */
+const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
+const CONTAINER_NAME = process.env.AZURE_CONTAINER_NAME;
+
+const blobServiceClient = BlobServiceClient.fromConnectionString(
+  AZURE_STORAGE_CONNECTION_STRING
+);
+const containerClient = blobServiceClient.getContainerClient(CONTAINER_NAME);
+
+/* ---------- Multer (Memory Storage) ---------- */
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+/* ---------- In-memory posts ---------- */
 const images = []; // { path, user, caption }
 
 /* ---------- Routes ---------- */
@@ -54,10 +61,7 @@ app.get("/signup", (req, res) => {
 // Signup (POST)
 app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
-
-  // Simple in-memory user store
   users.push({ username, password, role });
-
   res.redirect("/login");
 });
 
@@ -74,9 +78,7 @@ app.post("/login", (req, res) => {
     (u) => u.username === username && u.password === password
   );
 
-  if (!user) {
-    return res.send("Invalid login");
-  }
+  if (!user) return res.send("Invalid login");
 
   req.session.user = {
     username: user.username,
@@ -99,23 +101,35 @@ app.get("/upload", (req, res) => {
   res.render("upload", { user: req.session.user });
 });
 
-// Upload image (POST)
-app.post("/upload", upload.single("photo"), (req, res) => {
+// Upload image to Azure Blob Storage
+app.post("/upload", upload.single("photo"), async (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
   const { caption } = req.body;
 
-  if (!req.file) {
-    return res.send("No file uploaded");
+  if (!req.file) return res.send("No file uploaded");
+
+  try {
+    const blobName = Date.now() + "-" + req.file.originalname;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+
+    await blockBlobClient.uploadData(req.file.buffer, {
+      blobHTTPHeaders: { blobContentType: req.file.mimetype },
+    });
+
+    const imageUrl = blockBlobClient.url;
+
+    images.push({
+      path: imageUrl,
+      user: req.session.user.username,
+      caption: caption,
+    });
+
+    res.redirect("/");
+  } catch (err) {
+    console.error("Blob upload error:", err);
+    res.status(500).send("Error uploading to Azure Blob Storage");
   }
-
-  images.push({
-    path: "/uploads/" + req.file.filename,
-    user: req.session.user.username,
-    caption: caption,
-  });
-
-  res.redirect("/");
 });
 
 /* ---------- Start Server ---------- */
