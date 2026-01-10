@@ -1,6 +1,5 @@
 const express = require("express");
 const session = require("express-session");
-const cookieParser = require("cookie-parser");
 const path = require("path");
 const multer = require("multer");
 
@@ -10,17 +9,12 @@ const PORT = process.env.PORT || 3000;
 /* ---------- Middleware ---------- */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(cookieParser());
 
 app.use(
   session({
-    secret: "snapverse-secret-key",
+    secret: "instagram-secret",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      secure: false, // true only if HTTPS
-      maxAge: 1000 * 60 * 60 * 24, // 1 day session
-    },
   })
 );
 
@@ -31,7 +25,7 @@ app.set("views", path.join(__dirname, "views"));
 /* ---------- Fake Users (in-memory) ---------- */
 const users = []; // { username, password, role }
 
-/* ---------- File Upload (LOCAL STORAGE) ---------- */
+/* ---------- File Upload (Multer) ---------- */
 const storage = multer.diskStorage({
   destination: "public/uploads",
   filename: (req, file, cb) => {
@@ -40,7 +34,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-/* ---------- In-memory posts ---------- */
 const images = []; // { path, user, caption }
 
 /* ---------- Routes ---------- */
@@ -62,10 +55,10 @@ app.get("/signup", (req, res) => {
 app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
 
+  // Simple in-memory user store
   users.push({ username, password, role });
 
-  req.session.user = { username, role };
-  res.redirect("/");
+  res.redirect("/login");
 });
 
 // Login (GET)
@@ -81,7 +74,9 @@ app.post("/login", (req, res) => {
     (u) => u.username === username && u.password === password
   );
 
-  if (!user) return res.send("Invalid login");
+  if (!user) {
+    return res.send("Invalid login");
+  }
 
   req.session.user = {
     username: user.username,
@@ -104,13 +99,15 @@ app.get("/upload", (req, res) => {
   res.render("upload", { user: req.session.user });
 });
 
-// Upload image (LOCAL)
+// Upload image (POST)
 app.post("/upload", upload.single("photo"), (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
   const { caption } = req.body;
 
-  if (!req.file) return res.send("No file uploaded");
+  if (!req.file) {
+    return res.send("No file uploaded");
+  }
 
   images.push({
     path: "/uploads/" + req.file.filename,
@@ -123,5 +120,5 @@ app.post("/upload", upload.single("photo"), (req, res) => {
 
 /* ---------- Start Server ---------- */
 app.listen(PORT, () => {
-  console.log(`SnapVerse running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
