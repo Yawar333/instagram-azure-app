@@ -2,8 +2,6 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const multer = require("multer");
-const { BlobServiceClient } = require("@azure/storage-blob");
-require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -14,7 +12,7 @@ app.use(express.static("public"));
 
 app.use(
   session({
-    secret: "snapverse-secret",
+    secret: "instagram-secret",
     resave: false,
     saveUninitialized: false,
   })
@@ -27,17 +25,13 @@ app.set("views", path.join(__dirname, "views"));
 /* ---------- Fake Users (in-memory) ---------- */
 const users = []; // { username, password, role }
 
-/* ---------- Azure Blob Setup ---------- */
-const AZURE_STORAGE_CONNECTION_STRING = process.env.AZURE_STORAGE_CONNECTION_STRING;
-const CONTAINER_NAME = process.env.AZURE_CONTAINER_NAME;
-
-const blobServiceClient = BlobServiceClient.fromConnectionString(
-  AZURE_STORAGE_CONNECTION_STRING
-);
-const containerClient = blobServiceClient.getContainerClient(CONTAINER_NAME);
-
-/* ---------- Multer (Memory Storage) ---------- */
-const storage = multer.memoryStorage();
+/* ---------- File Upload (Multer - LOCAL STORAGE) ---------- */
+const storage = multer.diskStorage({
+  destination: "public/uploads",
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
 const upload = multer({ storage });
 
 /* ---------- In-memory posts ---------- */
@@ -101,35 +95,21 @@ app.get("/upload", (req, res) => {
   res.render("upload", { user: req.session.user });
 });
 
-// Upload image to Azure Blob Storage
-app.post("/upload", upload.single("photo"), async (req, res) => {
+// Upload image (LOCAL)
+app.post("/upload", upload.single("photo"), (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
   const { caption } = req.body;
 
   if (!req.file) return res.send("No file uploaded");
 
-  try {
-    const blobName = Date.now() + "-" + req.file.originalname;
-    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+  images.push({
+    path: "/uploads/" + req.file.filename,
+    user: req.session.user.username,
+    caption: caption,
+  });
 
-    await blockBlobClient.uploadData(req.file.buffer, {
-      blobHTTPHeaders: { blobContentType: req.file.mimetype },
-    });
-
-    const imageUrl = blockBlobClient.url;
-
-    images.push({
-      path: imageUrl,
-      user: req.session.user.username,
-      caption: caption,
-    });
-
-    res.redirect("/");
-  } catch (err) {
-    console.error("Blob upload error:", err);
-    res.status(500).send("Error uploading to Azure Blob Storage");
-  }
+  res.redirect("/");
 });
 
 /* ---------- Start Server ---------- */
