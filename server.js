@@ -34,7 +34,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-const images = []; // { path, user, caption }
+/* ---------- In-memory posts ---------- */
+const images = []; 
+// Each post: { path, user, caption, likes, comments: [] }
 
 /* ---------- Routes ---------- */
 
@@ -55,7 +57,6 @@ app.get("/signup", (req, res) => {
 app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
 
-  // Simple in-memory user store
   users.push({ username, password, role });
 
   res.redirect("/login");
@@ -113,7 +114,31 @@ app.post("/upload", upload.single("photo"), (req, res) => {
     path: "/uploads/" + req.file.filename,
     user: req.session.user.username,
     caption: caption,
+    likes: 0,
+    comments: [],
   });
+
+  res.redirect("/");
+});
+
+/* ---------- LIKE POST ---------- */
+app.post("/like/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  if (images[id]) images[id].likes++;
+  res.redirect("/");
+});
+
+/* ---------- COMMENT POST ---------- */
+app.post("/comment/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const { comment } = req.body;
+
+  if (images[id] && comment.trim() !== "") {
+    images[id].comments.push({
+      user: req.session.user.username,
+      text: comment,
+    });
+  }
 
   res.redirect("/");
 });

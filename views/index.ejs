@@ -50,23 +50,16 @@
       color: white;
     }
 
-    /* Feed wrapper like Instagram/Facebook */
     .feed {
       margin-top: 20px;
       display: flex;
       flex-direction: column;
-      align-items: center;  /* center the column */
+      align-items: center;
     }
 
-    .feed h2 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    /* Single centered column, fixed width */
     .feed-list {
       width: 100%;
-      max-width: 600px; /* like IG/Facebook post width */
+      max-width: 600px;
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -80,37 +73,46 @@
       text-align: left;
     }
 
-    .post-header {
-      font-weight: bold;
-      margin-bottom: 10px;
-      font-size: 0.95rem;
-      color: #eee;
-    }
-
-    /* More realistic image style */
     .post img {
       width: 100%;
-      max-height: 400px;   /* don’t let it be huge */
-      object-fit: cover;   /* crop nicely */
+      max-height: 400px;
+      object-fit: cover;
       border-radius: 8px;
       margin-bottom: 10px;
       cursor: pointer;
       transition: transform 0.2s ease;
-      display: block;
     }
 
     .post img:hover {
       transform: scale(1.02);
     }
 
-    .post-caption {
-      margin-bottom: 5px;
-      font-size: 0.95rem;
+    .comment-box input {
+      width: 80%;
+      padding: 6px;
+      border-radius: 5px;
+      border: none;
+      margin-right: 5px;
     }
 
-    .post-meta {
-      font-size: 0.8rem;
-      color: #bbb;
+    .comment-box button {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 5px;
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 10px;
+    }
+
+    li {
+      font-size: 0.9rem;
+      margin-bottom: 5px;
     }
   </style>
 </head>
@@ -137,16 +139,35 @@
     <div class="feed">
       <h2>Live Feed</h2>
       <div class="feed-list">
-        <% images.forEach(image => { %>
+        <% images.forEach((image, index) => { %>
           <div class="post">
-            <div class="post-header">
-              <%= image.user %>
-            </div>
+
+            <strong><%= image.user %></strong>
+
             <a href="<%= image.path %>" target="_blank">
               <img src="<%= image.path %>" alt="SnapVerse post" />
             </a>
-            <p class="post-caption"><%= image.caption %></p>
-            <div class="post-meta">Tap image to view full size</div>
+
+            <p><%= image.caption %></p>
+
+            <!-- LIKE BUTTON -->
+            <form action="/like/<%= index %>" method="POST">
+              <button type="submit">❤️ Like (<%= image.likes %>)</button>
+            </form>
+
+            <!-- COMMENT FORM -->
+            <form action="/comment/<%= index %>" method="POST" class="comment-box">
+              <input type="text" name="comment" placeholder="Add a comment..." required />
+              <button type="submit">Post</button>
+            </form>
+
+            <!-- SHOW COMMENTS -->
+            <ul>
+              <% image.comments.forEach(c => { %>
+                <li><strong><%= c.user %>:</strong> <%= c.text %></li>
+              <% }) %>
+            </ul>
+
           </div>
         <% }) %>
       </div>
