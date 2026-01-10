@@ -53,13 +53,16 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-// Signup (POST)
+// Signup (POST) — AUTO LOGIN
 app.post("/signup", (req, res) => {
   const { username, password, role } = req.body;
 
   users.push({ username, password, role });
 
-  res.redirect("/login");
+  // Auto login
+  req.session.user = { username, role };
+
+  res.redirect("/");
 });
 
 // Login (GET)
@@ -75,9 +78,7 @@ app.post("/login", (req, res) => {
     (u) => u.username === username && u.password === password
   );
 
-  if (!user) {
-    return res.send("Invalid login");
-  }
+  if (!user) return res.send("Invalid login");
 
   req.session.user = {
     username: user.username,
@@ -94,21 +95,28 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// Upload page (GET)
+// Upload page (GET) — ROLE PROTECTED
 app.get("/upload", (req, res) => {
   if (!req.session.user) return res.redirect("/login");
+
+  if (req.session.user.role === "consumer") {
+    return res.send("Consumers are not allowed to upload photos.");
+  }
+
   res.render("upload", { user: req.session.user });
 });
 
-// Upload image (POST)
+// Upload image (POST) — ROLE PROTECTED
 app.post("/upload", upload.single("photo"), (req, res) => {
   if (!req.session.user) return res.redirect("/login");
 
+  if (req.session.user.role === "consumer") {
+    return res.send("Consumers are not allowed to upload photos.");
+  }
+
   const { caption } = req.body;
 
-  if (!req.file) {
-    return res.send("No file uploaded");
-  }
+  if (!req.file) return res.send("No file uploaded");
 
   images.push({
     path: "/uploads/" + req.file.filename,

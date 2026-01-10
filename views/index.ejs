@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>SnapVerse</title>
   <style>
     body {
@@ -125,7 +126,11 @@
       <h2>Welcome, <%= user.username %>!</h2>
 
       <div class="auth-buttons">
-        <a href="/upload" class="btn-primary">Upload Photo</a>
+
+        <% if (user.role !== "consumer") { %>
+          <a href="/upload" class="btn-primary">Upload Photo</a>
+        <% } %>
+
         <a href="/logout" class="btn-outline-light">Logout</a>
       </div>
 
