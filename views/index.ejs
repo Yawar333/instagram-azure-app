@@ -1,218 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>SnapVerse - Share Instantly</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-  <style>
-    body {
-      background: #0a0f1c;
-      color: #e0e0e0;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    .hero {
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      font-weight: bold;
-      color: #00ff99;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      margin-top: 10px;
-      color: #aaa;
-    }
-
-    .hero-buttons {
-      margin-top: 30px;
-    }
-
-    .hero-buttons a {
-      margin: 0 10px;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-weight: bold;
-      text-decoration: none;
-    }
-
-    .btn-start {
-      background-color: #00ff99;
-      color: #0a0f1c;
-    }
-
-    .btn-login {
-      border: 2px solid #00ff99;
-      color: #00ff99;
-    }
-
-    .features {
-      padding: 50px 20px;
-      background: rgba(255,255,255,0.03);
-    }
-
-    .feature-box {
-      background: rgba(255,255,255,0.06);
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    .feed-title {
-      margin-top: 40px;
-      margin-bottom: 20px;
-      font-size: 2rem;
-      color: #00ff99;
-    }
-
-    .feed-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 0 20px 60px;
-    }
-
-    .post-card {
-      background: rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-    }
-
-    .post-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    .comment-box input {
-      width: 70%;
-      padding: 6px;
-      border-radius: 5px;
-      border: none;
-      margin-right: 5px;
-    }
-
-    .comment-box button {
-      padding: 6px 10px;
-      border: none;
-      border-radius: 5px;
-      background: #00ff99;
-      color: #0a0f1c;
-      cursor: pointer;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-      margin-top: 10px;
-    }
-
-    li {
-      font-size: 0.9rem;
-      margin-bottom: 5px;
-    }
-
-    .footer {
-      padding: 20px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #888;
-      background: rgba(0,0,0,0.2);
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapVerse | Share Your Moments</title>
+  <link href="/css/style.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 </head>
+
 <body>
 
-  <div class="hero">
-    <h1>SnapVerse</h1>
-    <p>Instant photo sharing for creators. Built on Azure. Fast, simple, scalable.</p>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="/" class="navbar-brand">SnapVerse</a>
+    </div>
 
-    <div class="hero-buttons">
-
+    <div class="nav-links">
       <% if (!user) { %>
-
-        <a href="/signup" class="btn-start">Get Started</a>
-        <a href="/login" class="btn-login">Login</a>
-
-      <% } else { %>
-
-        <h3 style="margin-top: 20px; color: #00ff99;">
-          Welcome, <%= user.username %>
-        </h3>
-
-        <% if (user.role !== "consumer") { %>
-          <a href="/upload" class="btn-start">Upload Photo</a>
-        <% } %>
-
-        <a href="/logout" class="btn-login">Logout</a>
-
-      <% } %>
-
+        <!-- Clean Nav for Guest (Match Screenshot - No Home Link) -->
+        <a href="/login" class="nav-item">Login</a>
+        <a href="/signup" class="btn btn-primary" style="padding: 10px 24px;">Sign Up</a>
+        <% } else { %>
+          <a href="/" class="nav-item active-link">Home</a>
+          <span class="nav-item desktop-only">Hi, <%= user.username %></span>
+          <% if (user.role !=="consumer" ) { %>
+            <a href="/upload" class="nav-item upload-btn-nav">
+              <i class="bi bi-cloud-upload-fill" style="color: white; margin-right: 5px;"></i> Upload
+            </a>
+            <% } %>
+              <a href="/logout" class="nav-item logout-link" title="Logout">
+                <i class="bi bi-box-arrow-right" style="font-size: 1.2rem;"></i>
+              </a>
+              <% } %>
     </div>
-  </div>
+  </nav>
 
-  <div class="features container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="feature-box">
-          <h4>Fast Uploads</h4>
-          <p>Upload your photos instantly with captions and share them with the world.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="feature-box">
-          <h4>Live Feed</h4>
-          <p>See what others are posting in real time. Like and comment to engage.</p>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="feature-box">
-          <h4>Cloud Native</h4>
-          <p>Hosted on Azure App Service with Blob Storage for scalable performance.</p>
+  <!-- HERO SECTION / LANDING PAGE logic -->
+  <!-- Case 1: Guest User (Not Logged In) -> Show Landing Hero ONLY -->
+  <% if (!user) { %>
+    <div class="landing-hero">
+      <div class="landing-content">
+        <h1 class="animate-text">Visual Stories, <br><span class="highlight">Unleashed.</span></h1>
+        <p class="subtitle">
+          Join the next generation of visual creators. SnapVerse is the canvas for your imagination,
+          powered by the cloud and built for community.
+        </p>
+        <div class="cta-buttons">
+          <a href="/signup" class="btn btn-primary btn-lg">Start Creating</a>
+          <a href="/login" class="btn btn-secondary btn-lg">Member Login</a>
         </div>
       </div>
     </div>
-  </div>
 
-  <h2 class="text-center feed-title">Live Feed</h2>
+    <!-- Platform Features (New Layout: Cards Grid) -->
+    <div class="landing-features" style="gap: 25px;">
+      <h2 class="features-title" style="grid-column: 1/-1; margin-bottom: 30px;">Why SnapVerse?</h2>
 
-  <div class="feed-grid">
-    <% images.forEach((image, index) => { %>
-      <div class="post-card">
-        <strong><%= image.user %></strong>
-        <img src="<%= image.path %>" alt="SnapVerse post" />
-        <p><%= image.caption %></p>
-
-        <form action="/like/<%= index %>" method="POST">
-          <button type="submit" class="btn btn-sm btn-outline-light">❤️ Like (<%= image.likes %>)</button>
-        </form>
-
-        <form action="/comment/<%= index %>" method="POST" class="comment-box mt-2">
-          <input type="text" name="comment" placeholder="Add a comment..." required />
-          <button type="submit">Post</button>
-        </form>
-
-        <ul>
-          <% image.comments.forEach(c => { %>
-            <li><strong><%= c.user %>:</strong> <%= c.text %></li>
-          <% }) %>
-        </ul>
+      <!-- Creator Mode -->
+      <div class="feature-item card-style">
+        <div class="icon-box">
+          <i class="bi bi-camera-reels-fill" style="margin: 0;"></i>
+        </div>
+        <div class="text-box">
+          <h3>For Storytellers</h3>
+          <p>A dedicated space to clear the noise and focus on your visual narrative.</p>
+        </div>
       </div>
-    <% }) %>
-  </div>
 
-  <div class="footer">
-    © 2026 SnapVerse — COM769 Coursework Project
-  </div>
+      <!-- Discover & Search -->
+      <div class="feature-item card-style">
+        <div class="icon-box">
+          <i class="bi bi-compass-fill" style="margin: 0;"></i>
+        </div>
+        <div class="text-box">
+          <h3>Endless Exploration</h3>
+          <p>Dive deep into global trends and discover hidden gems instantly.</p>
+        </div>
+      </div>
+
+      <!-- Cloud Native -->
+      <div class="feature-item card-style">
+        <div class="icon-box">
+          <i class="bi bi-infinity" style="margin: 0;"></i>
+        </div>
+        <div class="text-box">
+          <h3>Limitless Scale</h3>
+          <p>Backed by enterprise-grade Azure infrastructure. We grow as you grow.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 2: Logged In User -> Show Feed or Empty State -->
+    <% } else { %>
+
+      <!-- Empty Feed State -->
+      <% if (images.length===0) { %>
+        <div class="container mt-5 text-center empty-feed-state">
+          <div class="card p-5"
+            style="max-width: 600px; margin: 0 auto; border: none; background: #fff; box-shadow: var(--card-shadow);">
+            <div style="font-size: 3rem; margin-bottom: 20px;">✨</div>
+            <h2 style="margin-bottom: 10px; color: var(--text-color);">Hello, <%= user.username %>
+            </h2>
+            <p style="color: var(--text-muted);">Your canvas is blank. Time to paint it.</p>
+
+            <% if (user.role !=='consumer' ) { %>
+              <div class="mt-4">
+                <a href="/upload" class="btn btn-primary">
+                  Share a Moment
+                </a>
+              </div>
+              <% } %>
+          </div>
+        </div>
+
+        <!-- Main Feed (Only for Logged In Users) -->
+        <% } else { %>
+          <div class="container feed-container">
+            <div class="feed-header text-center mb-4">
+              <h2 class="feed-title">Latest Moments</h2>
+            </div>
+
+            <div class="feed-grid">
+              <% images.slice().reverse().forEach((image, index)=> { %>
+                <% const realIndex=images.length - 1 - index; %>
+
+                  <div class="post-card">
+                    <!-- Left: Image -->
+                    <div class="image-wrapper">
+                      <img src="<%= image.path %>" class="post-image" alt="Post by <%= image.user %>">
+                    </div>
+
+                    <!-- Right: Content -->
+                    <div class="post-content-wrapper">
+                      <div class="post-header">
+                        <div class="user-avatar-placeholder">
+                          <%= image.user.substring(0,2).toUpperCase() %>
+                        </div>
+                        <div class="user-info">
+                          <div class="user-name">
+                            <%= image.user %>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="post-footer">
+                        <div class="caption-area">
+                          <span class="user-name-inline">
+                            <%= image.user %>
+                          </span>
+                          <span class="caption-text">
+                            <%= image.caption %>
+                          </span>
+                        </div>
+
+                        <div class="comments-section scrollbar-hidden">
+                          <% if (image.comments.length> 0) { %>
+                            <% image.comments.slice(-3).forEach(c=> { %>
+                              <div class="comment-row">
+                                <strong style="font-weight: 600;">
+                                  <%= c.user %>
+                                </strong>
+                                <%= c.text %>
+                              </div>
+                              <% }) %>
+                                <% } %>
+                        </div>
+
+                        <div class="post-actions">
+                          <form action="/like/<%= realIndex %>" method="POST" style="display:inline;">
+                            <button class="action-btn like-btn">
+                              <i class="bi bi-heart-fill" style="color: #ed4956;"></i>
+                              <span>
+                                <%= image.likes %>
+                              </span>
+                            </button>
+                          </form>
+                        </div>
+
+                        <% if (user) { %>
+                          <form action="/comment/<%= realIndex %>" method="POST" class="comment-input-area mt-2"
+                            style="padding-top: 10px;">
+                            <input type="text" name="comment" class="comment-input" placeholder="Add a comment..."
+                              required />
+                            <button type="submit" class="post-btn">Post</button>
+                          </form>
+                          <% } %>
+                      </div>
+                    </div>
+                  </div>
+                  <% }) %>
+            </div>
+          </div>
+          <% } %>
+            <% } %>
+
+              <!-- LIGHTBOX MODAL -->
+              <div id="imageModal" class="lightbox-modal">
+                <span class="close-modal">&times;</span>
+                <img class="modal-content" id="fullImage">
+                <div id="captionText"></div>
+              </div>
+
+              <script>
+                const modal = document.getElementById('imageModal');
+                const modalImg = document.getElementById("fullImage");
+                const captionText = document.getElementById("captionText");
+                const span = document.getElementsByClassName("close-modal")[0];
+
+                // Add click event to all post images
+                const images = document.querySelectorAll('.post-image');
+                images.forEach(img => {
+                  img.onclick = function () {
+                    modal.style.flex = "flex";
+                    modal.style.display = "flex"; // Force flex
+                    modalImg.src = this.src;
+                    captionText.innerHTML = this.alt;
+                  }
+                });
+
+                span.onclick = function () {
+                  modal.style.display = "none";
+                }
+
+                modal.onclick = function (e) {
+                  if (e.target === modal) {
+                    modal.style.display = "none";
+                  }
+                }
+              </script>
+
+              <footer class="main-footer">
+                <p>© 2026 SnapVerse - COM769 Coursework Project</p>
+                <p style="font-size: 0.8rem; opacity: 0.6;">Built with Node.js & Azure</p>
+              </footer>
 
 </body>
+
 </html>
