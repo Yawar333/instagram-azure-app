@@ -134,6 +134,7 @@
                     </div>
 
                     <!-- Right: Content -->
+                    <!-- Right: Content -->
                     <div class="post-content-wrapper">
                       <div class="post-header">
                         <div class="user-avatar-placeholder">
@@ -143,23 +144,62 @@
                           <div class="user-name">
                             <%= image.user %>
                           </div>
+                          <div class="post-time">2 hours ago &middot; <i class="bi bi-globe-americas"
+                              style="font-size: 0.8rem;"></i></div>
+                        </div>
+                        <div class="post-options">
+                          <i class="bi bi-three-dots"></i>
                         </div>
                       </div>
 
-                      <div class="post-footer">
+                      <div class="post-body">
                         <div class="caption-area">
-                          <span class="user-name-inline">
-                            <%= image.user %>
-                          </span>
                           <span class="caption-text">
                             <%= image.caption %>
                           </span>
                         </div>
+                      </div>
 
+                      <div class="post-footer">
+                        <!-- Stats Row -->
+                        <div class="stats-row">
+                          <div class="like-stat">
+                            <i class="bi bi-hand-thumbs-up-fill like-icon-blue"></i>
+                            <i class="bi bi-heart-fill like-icon-red"></i>
+                            <span class="stat-text">
+                              <%= image.likes %> others
+                            </span>
+                          </div>
+                          <div class="comment-stat">
+                            <span class="stat-text">
+                              <%= image.comments.length %> comments
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="action-divider"></div>
+
+                        <!-- Action Buttons -->
+                        <div class="post-actions-grid">
+                          <form action="/like/<%= realIndex %>" method="POST" class="action-form">
+                            <button class="fb-action-btn">
+                              <i class="bi bi-hand-thumbs-up"></i> Like
+                            </button>
+                          </form>
+                          <button class="fb-action-btn">
+                            <i class="bi bi-chat-left"></i> Comment
+                          </button>
+                          <button class="fb-action-btn">
+                            <i class="bi bi-share"></i> Share
+                          </button>
+                        </div>
+
+                        <!-- Comments section -->
                         <div class="comments-section scrollbar-hidden">
                           <% if (image.comments.length> 0) { %>
                             <% image.comments.slice(-3).forEach(c=> { %>
-                              <div class="comment-row">
+                              <div class="comment-bubble">
                                 <strong style="font-weight: 600;">
                                   <%= c.user %>
                                 </strong>
@@ -169,24 +209,17 @@
                                 <% } %>
                         </div>
 
-                        <div class="post-actions">
-                          <form action="/like/<%= realIndex %>" method="POST" style="display:inline;">
-                            <button class="action-btn like-btn">
-                              <i class="bi bi-heart-fill" style="color: #ed4956;"></i>
-                              <span>
-                                <%= image.likes %>
-                              </span>
-                            </button>
-                          </form>
-                        </div>
-
                         <% if (user) { %>
-                          <form action="/comment/<%= realIndex %>" method="POST" class="comment-input-area mt-2"
-                            style="padding-top: 10px;">
-                            <input type="text" name="comment" class="comment-input" placeholder="Add a comment..."
-                              required />
-                            <button type="submit" class="post-btn">Post</button>
-                          </form>
+                          <div class="comment-input-wrapper mt-2">
+                            <div class="user-avatar-small">
+                              <%= user.username.substring(0,2).toUpperCase() %>
+                            </div>
+                            <form action="/comment/<%= realIndex %>" method="POST" class="comment-form-flex"
+                              style="flex-grow:1;">
+                              <input type="text" name="comment" class="fb-comment-input"
+                                placeholder="Write a comment..." required />
+                            </form>
+                          </div>
                           <% } %>
                       </div>
                     </div>

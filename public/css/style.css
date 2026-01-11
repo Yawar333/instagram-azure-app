@@ -305,6 +305,7 @@ h5 {
 }
 
 /* RIGHT SIDE: Content */
+/* RIGHT SIDE: Content - Facebook Style Refined */
 .post-content-wrapper {
     display: flex;
     flex-direction: column;
@@ -313,54 +314,213 @@ h5 {
 }
 
 .post-header {
-    padding: 15px 20px;
-    border-bottom: 1px solid #f1f5f9;
+    padding: 12px 16px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     flex-shrink: 0;
 }
 
 .user-avatar-placeholder {
     width: 40px;
     height: 40px;
-    font-size: 1rem;
+    background: #e4e6eb;
+    /* FB placeholder grey */
+    color: #1c1e21;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
 }
 
 .user-info .user-name {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #050505;
+    line-height: 1.2;
+}
+
+.post-time {
+    font-size: 0.8rem;
+    color: #65676b;
+    /* FB Muted Text */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.post-options {
+    color: #65676b;
+    cursor: pointer;
+}
+
+/* Body / Caption */
+.post-body {
+    padding: 4px 16px 8px;
+}
+
+.caption-text {
+    font-size: 0.95rem;
+    color: #050505;
+    font-weight: 400;
 }
 
 .post-footer {
-    padding: 20px;
+    padding: 0 16px 12px;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow-y: auto;
-    /* Allow scrolling for long comments */
 }
 
-.caption-area {
-    margin-bottom: 15px;
+/* 1. Stats Row */
+.stats-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    color: #65676b;
+    font-size: 0.9rem;
 }
 
-.caption-text {
-    font-size: 1rem;
-    color: #4b5563;
-}
-
-.comments-section {
-    margin-top: auto;
-    /* Push to bottom if space allows */
-}
-
-.post-actions {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #f1f5f9;
+.like-stat {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 4px;
+}
+
+.like-icon-blue {
+    background: #1877f2;
+    color: white;
+    border-radius: 50%;
+    padding: 3px;
+    font-size: 0.6rem;
+}
+
+.like-icon-red {
+    background: #fa3e3e;
+    color: white;
+    border-radius: 50%;
+    padding: 3px;
+    font-size: 0.6rem;
+    margin-left: -6px;
+    /* Overlap */
+    border: 1px solid #fff;
+}
+
+.stat-text {
+    margin-left: 4px;
+}
+
+.stat-text:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* 2. Divider */
+.action-divider {
+    height: 1px;
+    background: #ced0d4;
+    margin-bottom: 4px;
+}
+
+/* 3. Action Buttons Grid */
+.post-actions-grid {
+    display: flex;
+    justify-content: space-between;
+}
+
+.action-form {
+    flex: 1;
+    display: flex;
+}
+
+/* Make form take part of grid */
+
+.fb-action-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 6px 0;
+    border-radius: 4px;
+    color: #65676b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.1s;
+}
+
+.fb-action-btn:hover {
+    background: #f0f2f5;
+}
+
+.fb-action-btn i {
+    font-size: 1.2rem;
+}
+
+/* 4. Input Area */
+.comment-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.user-avatar-small {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e4e6eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.fb-comment-input {
+    width: 100%;
+    background: #f0f2f5;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    color: #050505;
+}
+
+.fb-comment-input:focus {
+    outline: none;
+    background: #eaebed;
+}
+
+/* Comments Bubble */
+.comments-section {
+    margin-top: 10px;
+}
+
+.comment-bubble {
+    background: #f0f2f5;
+    border-radius: 18px;
+    padding: 8px 12px;
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #050505;
 }
 
 .action-btn i {
